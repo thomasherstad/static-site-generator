@@ -87,5 +87,10 @@ class TextInlineMarkdown(unittest.TestCase):
         text_extracted = extract_markdown_links(text)
         self.assertEqual(text_extracted, expected)
 
+    def test_split_nodes_image(self):
+        input_text = "not"
+        text_split = "done"
+        self.assertEqual()
+
 if __name__ == "__main__":
     unittest.main()
