@@ -1,6 +1,6 @@
 import unittest
 
-from textnode import TextNode, split_nodes_delimiter
+from textnode import TextNode
 
 text_type_text = "text"
 text_type_bold = "bold"

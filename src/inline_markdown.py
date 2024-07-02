@@ -5,7 +5,7 @@ import re
 def split_nodes_delimiter(old_nodes, delimiter, text_type):
     new_nodes = []
     for old_node in old_nodes:
-        if type(old_node) != TextNode:
+        if old_node.text_type != text_type_text:
             new_nodes.append(old_node)
             continue
         
@@ -39,7 +39,7 @@ def extract_markdown_links(text):
 def split_nodes_image(old_nodes):
     new_nodes = []
     for old_node in old_nodes:
-        if type(old_node) != TextNode:
+        if old_node.text_type != text_type_text:
             new_nodes.append(old_node)
             continue
         original_text = old_node.text
@@ -84,4 +84,10 @@ def split_nodes_link(old_nodes):
 
 
 def text_to_textnodes(text):
-    pass
+    node = TextNode(text, text_type_text)
+    bolds = split_nodes_delimiter([node], "**", text_type_bold)
+    italics = split_nodes_delimiter(bolds, "*", text_type_italic)
+    code = split_nodes_delimiter(italics, "`", text_type_code)
+    images = split_nodes_image(code)
+    links = split_nodes_link(images)
+    return links

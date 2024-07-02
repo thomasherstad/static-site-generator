@@ -1,9 +1,8 @@
 import unittest
-from inline_markdown import split_nodes_delimiter, extract_markdown_images, extract_markdown_links
+from inline_markdown import split_nodes_delimiter, extract_markdown_images, extract_markdown_links, split_nodes_image, split_nodes_link, text_to_textnodes
 from textnode import TextNode, text_type_text, text_type_bold, text_type_italic, text_type_code, text_type_link, text_type_image
 
-
-class TextInlineMarkdown(unittest.TestCase):
+class TestInlineMarkdown(unittest.TestCase):
     # Add tests for split_nodes_delimiter()
     def test_split_nodes_simple_bold(self):
         node = TextNode("This is text with a **bold** word", text_type_text)
@@ -98,7 +97,7 @@ class TextInlineMarkdown(unittest.TestCase):
             self.assertEqual()
     '''
             
-    def test_text_to_textnodes(text):
+    def test_text_to_textnodes(self):
         input_text = "This is **text** with an *italic* word and a `code block` and an ![image](https://storage.googleapis.com/qvault-webapp-dynamic-assets/course_assets/zjjcJKZ.png) and a [link](https://boot.dev)"
         expected = [
                     TextNode("This is ", text_type_text),
@@ -112,8 +111,28 @@ class TextInlineMarkdown(unittest.TestCase):
                     TextNode(" and a ", text_type_text),
                     TextNode("link", text_type_link, "https://boot.dev"),
                 ]
-        
+        text = text_to_textnodes(input_text)
+        self.assertEqual(expected, text)
 
+
+    def test_text_to_textnodes_2bolds(self):
+        input_text = "This is **text** with an *italic* word **and** a `code block` and an ![image](https://storage.googleapis.com/qvault-webapp-dynamic-assets/course_assets/zjjcJKZ.png) and a [link](https://boot.dev)"
+        expected = [
+                    TextNode("This is ", text_type_text),
+                    TextNode("text", text_type_bold),
+                    TextNode(" with an ", text_type_text),
+                    TextNode("italic", text_type_italic),
+                    TextNode(" word ", text_type_text),
+                    TextNode("and", text_type_bold),
+                    TextNode(" a ", text_type_text),
+                    TextNode("code block", text_type_code),
+                    TextNode(" and an ", text_type_text),
+                    TextNode("image", text_type_image, "https://storage.googleapis.com/qvault-webapp-dynamic-assets/course_assets/zjjcJKZ.png"),
+                    TextNode(" and a ", text_type_text),
+                    TextNode("link", text_type_link, "https://boot.dev"),
+                ]
+        text = text_to_textnodes(input_text)
+        self.assertEqual(expected, text)
 
 if __name__ == "__main__":
     unittest.main()
